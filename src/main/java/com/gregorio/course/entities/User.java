@@ -12,13 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_user") // ANOTATION PARA DIZER AO BANCO DE DADOS QUE É UMA TABELA; pARA NÃO DAR
+							// CONFLITO COM PALAVRAS RESERVADAS DO BANCO;
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // ID AUTO-INCREMENT
 	private Long id;
 
 	private String name;
@@ -26,8 +29,16 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 
-	@OneToMany(mappedBy = "client")
-
+	@OneToMany(mappedBy = "client") // ASSOCIAÇÃO UM PARA MUITOS
+	@JsonIgnore
+	/*
+	 * ESSA ANOTATION É PARA O JACSON CHAMAR O JPA, QUE POR SUA VEZ, CHAMAR OS
+	 * PEDIDOS ASSOCIADOS AOS USUÁRIOS. AQUI NO USER, TODA VEZ QUE EU CHAMAR NA URL
+	 * /ORDERS/1, POR EXEMPLO, VIRÁ UM PEDIDO ASSOCIADO COM UM USUÁRIO; OBS: SE EU
+	 * COLOCAR ESSA ANOTATION NA CLASSE USER, TODA VEZ QUE EU CHAMAR NA URL
+	 * /USERS/1, POR EXEMPLO, VIRÁ UM USUÁRIO COM TODOS OS SEUS PEDIDOS; PORTANTO,
+	 * ESSA ANOTATION É COLOCADA DEPENDENDO DA REGRA DE EXIBIÇÃO ESCOLHIDA.
+	 */
 	private List<Order> orders = new ArrayList<>(); // ASSOCIATION WITH ORDER;
 	// AN USER CAN HAVE MANY ORDERS;
 

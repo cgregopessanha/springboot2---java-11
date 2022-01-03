@@ -1,5 +1,6 @@
 package com.gregorio.course.config;
 
+import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.gregorio.course.entities.Order;
 import com.gregorio.course.entities.User;
+import com.gregorio.course.repositories.OrderRepository;
 import com.gregorio.course.repositories.UserRepository;
 
 @Configuration
@@ -18,9 +21,13 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private OrderRepository orderRepository;
+
 	@Override
 	public void run(String... args) throws Exception {
 
+		// PRÉ-POPULANDO O BANCO DE DADOS COM USUÁRIOS;
 		User u1 = new User(null, "Arnold Swhaznegger", "arnoldbomberman@gmail.com", "85998765432", "admin");
 		User u2 = new User(null, "Silverster Stalonne", "rambo@gmail.com", "82973265432", "admin2");
 		User u3 = new User(null, "Aaron Rodgers", "aarongreenbay@packers.com", "5519876543", "admin3");
@@ -29,10 +36,16 @@ public class TestConfig implements CommandLineRunner {
 		User u6 = new User(null, "Patrick Mahomes", "mahomespatrick@chiefs.com", "098949323004", "adim5");
 		User u7 = new User(null, "Josh Allen", "josh@gmail.com", "3425436346352", "admin6");
 
+		// PRÉ-POPULANDO O BANCO DE DADOS COM PEDIDOS;
+		Order o1 = new Order(null, Instant.parse("2021-12-31T19:53:25Z"), u1); // ISO-8601
+		Order o2 = new Order(null, Instant.parse("2021-12-31T16:25:12Z"), u3); // ISO-8601
+		Order o3 = new Order(null, Instant.parse("2021-12-30T15:47:33Z"), u2); // ISO-8601
+		Order o4 = new Order(null, Instant.parse("2021-12-29T22:55:28Z"), u7); // ISO-8601
+
 		// SALVAR NO BANCO DE DADOS
 		userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, u5, u6, u7));
+		orderRepository.saveAll(Arrays.asList(o1, o2, o3, o4));
 	}
-
 }
 
 //DATABASE SEEDING (POPULAR BANCO DE DADOS)

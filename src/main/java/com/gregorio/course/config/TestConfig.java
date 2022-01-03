@@ -8,9 +8,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.gregorio.course.entities.Category;
 import com.gregorio.course.entities.Order;
 import com.gregorio.course.entities.User;
 import com.gregorio.course.entities.enums.OrderStatus;
+import com.gregorio.course.repositories.CategoryRepository;
 import com.gregorio.course.repositories.OrderRepository;
 import com.gregorio.course.repositories.UserRepository;
 
@@ -18,15 +20,29 @@ import com.gregorio.course.repositories.UserRepository;
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
 
-	// INJEÇÃO DE DEPENDÊNCIA
+	// INJEÇÃO DE DEPENDÊNCIA USER REPOSITORY
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	// INJEÇÃO DE DEPENDÊNCIA ORDER REPOSITORY
 	@Autowired
 	private OrderRepository orderRepository;
 
+	// INJEÇÃO DE DEPENDÊNCIA CATEGORY REPOSITORY
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
+
+		// PRÉ-POPULANDO O BANCO DE DADOS COM CATEGORIAS;
+		Category cat1 = new Category(null, "Electronics");
+		Category cat2 = new Category(null, "Computers");
+		Category cat3 = new Category(null, "Books");
+		Category cat4 = new Category(null, "Furnitures");
+
+		// SALVAR NO BANCO DE DADOS
+		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4));
 
 		// PRÉ-POPULANDO O BANCO DE DADOS COM USUÁRIOS;
 		User u1 = new User(null, "Arnold Swhaznegger", "arnoldbomberman@gmail.com", "85998765432", "admin");
@@ -42,7 +58,9 @@ public class TestConfig implements CommandLineRunner {
 		Order o2 = new Order(null, Instant.parse("2021-12-31T16:25:12Z"), OrderStatus.WAITING_PAYMENT, u3); // ISO-8601
 		Order o3 = new Order(null, Instant.parse("2021-12-30T15:47:33Z"), OrderStatus.SHIPPED, u2); // ISO-8601
 		Order o4 = new Order(null, Instant.parse("2021-12-29T22:55:28Z"), OrderStatus.CANCELED, u7); // ISO-8601
+		
 
+		
 		// SALVAR NO BANCO DE DADOS
 		userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, u5, u6, u7));
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3, o4));

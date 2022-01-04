@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.gregorio.course.entities.Category;
 import com.gregorio.course.entities.Order;
+import com.gregorio.course.entities.OrderItem;
 import com.gregorio.course.entities.Product;
 import com.gregorio.course.entities.User;
 import com.gregorio.course.entities.enums.OrderStatus;
 import com.gregorio.course.repositories.CategoryRepository;
+import com.gregorio.course.repositories.OrderItemRepository;
 import com.gregorio.course.repositories.OrderRepository;
 import com.gregorio.course.repositories.ProductRepository;
 import com.gregorio.course.repositories.UserRepository;
@@ -37,6 +39,9 @@ public class TestConfig implements CommandLineRunner {
 	// INJEÇÃO DE DEPENDÊNCIA PRODUCT REPOSITORY
 	@Autowired
 	private ProductRepository productRepository;
+
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -89,6 +94,14 @@ public class TestConfig implements CommandLineRunner {
 		// SALVAR NO BANCO DE DADOS
 		userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, u5, u6, u7));
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3, o4));
+
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p4.getPrice());
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p1.getPrice());
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+
 	}
 }
 
